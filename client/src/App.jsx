@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SettingsProvider } from "./context/SettingsContext.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { ToastProvider } from "./context/ToastContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Splash from "./components/Splash.jsx";
 import Transactions from "./pages/Transactions.jsx";
@@ -30,24 +31,26 @@ export default function App() {
   return (
     <AuthProvider>
       <SettingsProvider>
-        <BrowserRouter>
-          {showSplash && <Splash onFinish={() => setShowSplash(false)} />}
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            {/* Transactions is home now that Dashboard is gone */}
-            <Route path="/" element={page(<Transactions />)} />
-            <Route path="/transactions" element={<Navigate to="/" replace />} />
-            <Route path="/wallet" element={page(<Wallet />)} />
-            <Route path="/subscriptions" element={page(<Subscriptions />)} />
-            <Route path="/budget" element={page(<Budget />)} />
-            <Route path="/goals" element={page(<SavingsGoals />)} />
-            <Route path="/analytics" element={page(<Analytics />)} />
-            <Route path="/insights" element={page(<Insights />)} />
-            <Route path="/calendar" element={page(<CalendarPage />)} />
-            <Route path="/settings" element={page(<Settings />)} />
-          </Routes>
-        </BrowserRouter>
+        <ToastProvider>
+          <BrowserRouter>
+            {showSplash && <Splash onFinish={() => setShowSplash(false)} />}
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              {/* Transactions is home now that Dashboard is gone */}
+              <Route path="/" element={page(<Transactions />)} />
+              <Route path="/transactions" element={<Navigate to="/" replace />} />
+              <Route path="/wallet" element={page(<Wallet />)} />
+              <Route path="/subscriptions" element={page(<Subscriptions />)} />
+              <Route path="/budget" element={page(<Budget />)} />
+              <Route path="/goals" element={page(<SavingsGoals />)} />
+              <Route path="/analytics" element={page(<Analytics />)} />
+              <Route path="/insights" element={page(<Insights />)} />
+              <Route path="/calendar" element={page(<CalendarPage />)} />
+              <Route path="/settings" element={page(<Settings />)} />
+            </Routes>
+          </BrowserRouter>
+        </ToastProvider>
       </SettingsProvider>
     </AuthProvider>
   );

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import Topbar from "./Topbar.jsx";
+import Footer from "./Footer.jsx";
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,8 +28,9 @@ export default function Layout({ children }) {
         />
       )}
 
-      <main className="lg:ml-64 pt-24 px-4 sm:px-container-padding pb-container-padding min-h-screen">
-        <div className="max-w-[1400px] mx-auto">{children}</div>
+      <main className="lg:ml-64 pt-24 px-4 sm:px-container-padding pb-container-padding min-h-screen flex flex-col">
+        <div className="max-w-[1400px] mx-auto w-full flex-1">{children}</div>
+        <Footer />
       </main>
     </div>
   );

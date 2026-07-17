@@ -11,7 +11,9 @@ model User {
   id            Int            @id @default(autoincrement())
   email         String         @unique
   name          String?
-  passwordHash  String
+  // Null for accounts created via Google — they have no password to check.
+  passwordHash  String?
+  googleId      String?        @unique
   categories    Category[]
   transactions  Transaction[]
   budgets       Budget[]

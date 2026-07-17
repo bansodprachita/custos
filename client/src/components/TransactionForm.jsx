@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "./Icon.jsx";
 import { api } from "../api/client.js";
 import { currencySymbol } from "../utils/currency.js";
+import { useToast } from "../context/ToastContext.jsx";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -15,6 +16,14 @@ export default function TransactionForm({ categories, onCreated, currency }) {
   });
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const { showToast } = useToast();
+
+  // Categories load asynchronously and can arrive after this form's initial
+  // state is set, leaving categoryId empty even though the select visually
+  // shows the first option — keep them in sync once the real list shows up.
+  useEffect(() => {
+    setForm((f) => (f.categoryId || !categories[0] ? f : { ...f, categoryId: categories[0].id }));
+  }, [categories]);
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -45,6 +54,7 @@ export default function TransactionForm({ categories, onCreated, currency }) {
       });
       setForm((f) => ({ ...f, amount: "", description: "" }));
       onCreated();
+      showToast("Transaction added");
     } catch (err) {
       setError(err.message);
     } finally {
