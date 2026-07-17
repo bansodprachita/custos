@@ -7,6 +7,20 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("custos-token"));
   const [email, setEmail] = useState(() => localStorage.getItem("custos-email"));
   const [name, setName] = useState(() => localStorage.getItem("custos-name") || "");
+  const [waking, setWaking] = useState(false);
+
+  // The free hosting tier spins the backend down after inactivity, so a
+  // cold visitor's first request can take 30-60s. Surface that after a
+  // few seconds rather than leaving the button looking frozen.
+  async function withWakeHint(fn) {
+    const timer = setTimeout(() => setWaking(true), 4000);
+    try {
+      return await fn();
+    } finally {
+      clearTimeout(timer);
+      setWaking(false);
+    }
+  }
 
   function applySession(result) {
     setAuthToken(result.token);
@@ -18,11 +32,11 @@ export function AuthProvider({ children }) {
   }
 
   async function login(emailInput, password) {
-    applySession(await api.login(emailInput, password));
+    applySession(await withWakeHint(() => api.login(emailInput, password)));
   }
 
   async function register(emailInput, password) {
-    applySession(await api.register(emailInput, password));
+    applySession(await withWakeHint(() => api.register(emailInput, password)));
   }
 
   function logout() {
@@ -42,7 +56,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ token, email, name, login, register, logout, updateName, isAuthenticated: Boolean(token) }}
+      value={{ token, email, name, login, register, logout, updateName, waking, isAuthenticated: Boolean(token) }}
     >
       {children}
     </AuthContext.Provider>

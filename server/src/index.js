@@ -1,5 +1,8 @@
+import "express-async-errors";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import { authRouter } from "./routes/auth.js";
 import { requireAuth } from "./middleware/auth.js";
 import { transactionsRouter } from "./routes/transactions.js";
@@ -16,13 +19,27 @@ import { notificationsRouter } from "./routes/notifications.js";
 
 const app = express();
 
-app.use(cors());
+// In dev, FRONTEND_URL is unset so this falls back to allowing any origin.
+// In production, set FRONTEND_URL to your deployed frontend's exact origin.
+const allowedOrigin = process.env.FRONTEND_URL;
+app.use(helmet());
+app.use(cors(allowedOrigin ? { origin: allowedOrigin } : {}));
 app.use(express.json());
 
 app.get("/health", (req, res) => res.json({ status: "ok", app: "custos" }));
 
+// Slows down credential-stuffing and spam-registration attempts. Applies
+// only to these two routes, not the whole API, so normal usage is unaffected.
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many attempts. Please try again later." },
+});
+
 // Public — no token required
-app.use("/auth", authRouter);
+app.use("/auth", authLimiter, authRouter);
 
 // Everything below requires a valid Bearer token; requireAuth attaches
 // req.userId, which every route below uses to scope its queries.

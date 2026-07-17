@@ -84,7 +84,7 @@ function MoodCollage() {
 }
 
 export default function Register() {
-  const { register } = useAuth();
+  const { register, waking } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -168,6 +168,13 @@ export default function Register() {
             </label>
 
             {error && <p className="text-sm text-[var(--error)]">{error}</p>}
+
+            {submitting && waking && (
+              <p className="text-[12px] text-center text-[var(--on-surface-variant)]">
+                Waking up the server — this free-tier instance naps when idle, so the
+                first request can take up to a minute.
+              </p>
+            )}
 
             <button
               type="submit"

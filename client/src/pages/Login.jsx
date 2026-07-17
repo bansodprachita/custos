@@ -83,7 +83,7 @@ function MoodCollage() {
 }
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, waking } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -163,6 +163,13 @@ export default function Login() {
             </label>
 
             {error && <p className="text-sm text-[var(--error)]">{error}</p>}
+
+            {submitting && waking && (
+              <p className="text-[12px] text-center text-[var(--on-surface-variant)]">
+                Waking up the server — this free-tier instance naps when idle, so the
+                first request can take up to a minute.
+              </p>
+            )}
 
             <button
               type="submit"

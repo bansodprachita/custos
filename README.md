@@ -8,7 +8,7 @@ charts — with your own private account.
 
 - **Frontend:** React (Vite) + Recharts + Tailwind + React Router
 - **Backend:** Node.js + Express
-- **Database:** SQLite via Prisma ORM
+- **Database:** Postgres via Prisma ORM
 - **Auth:** JWT sessions, bcrypt-hashed passwords
 
 ## Project structure
@@ -23,10 +23,17 @@ custos/
 
 ### 1. Backend
 
+The database is Postgres, so you need a `DATABASE_URL` before you can run
+migrations — even for local dev. The free option is a [Neon](https://neon.com)
+project (no card required, free tier never expires): create one, grab the
+connection string it gives you, and use that as `DATABASE_URL`. A local
+Postgres install works too if you have one.
+
 ```bash
 cd server
 npm install
 cp .env.example .env
+# edit .env: paste your Neon (or local Postgres) connection string into DATABASE_URL
 npx prisma migrate dev --name init
 npm run dev
 ```
@@ -50,6 +57,10 @@ register your first account, and you're in.
 
 ## Features
 
+- Rate-limited auth endpoints, locked-down CORS, standard security headers
+  (`helmet`), and crash-safe error handling (`express-async-errors` — a
+  failed request returns an error response instead of taking the whole API
+  down)
 - Email/password accounts — every category, transaction, and budget is
   scoped to your account only
 - Editable display name and password, under Settings → Profile
@@ -69,11 +80,21 @@ register your first account, and you're in.
 
 ## Deploying it for real
 
-Right now the app only runs on your own machine. To make it a real hosted
-app reachable from your phone, you need to deploy the backend and frontend
-separately — they're two different kinds of servers.
+This is set up to run entirely on free tiers — no card required anywhere —
+comfortably up to a few hundred active users. Three separate services, each
+hosting a different piece: **Neon** (database), **Render** (backend API),
+**Vercel** (frontend). Prisma abstracts the database engine, so nothing in
+the application code changes between environments — only `DATABASE_URL`.
 
-### Backend (Render, free tier works)
+### 1. Database (Neon)
+
+1. Create a project at [neon.com](https://neon.com) (no card required). Its
+   free tier has no expiration date — unlike Render's free Postgres, which
+   auto-deletes after 30 days, this one is meant to be left running.
+2. Copy the connection string it gives you — you'll use it as `DATABASE_URL`
+   in the next step.
+
+### 2. Backend (Render, free tier)
 
 1. Push this repo to GitHub.
 2. On [render.com](https://render.com), create a **New Web Service** pointing
@@ -81,36 +102,52 @@ separately — they're two different kinds of servers.
 3. Build command: `npm install && npx prisma generate`
 4. Start command: `npx prisma migrate deploy && npm start`
 5. Add environment variables in Render's dashboard:
-   - `DATABASE_URL` = `file:./dev.db`
+   - `DATABASE_URL` = the Neon connection string from step 1
    - `JWT_SECRET` = a real random string (generate one locally with
      `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`)
+   - `FRONTEND_URL` = your Vercel URL from step 3 below (add this *after*
+     you have it — CORS will reject the frontend's requests until it's set)
 6. Deploy. Note the URL Render gives you (something like
    `https://custos-api.onrender.com`).
 
-**Known limitation:** Render's free tier disk isn't persistent across
-deploys — your SQLite file can get wiped when the service restarts or
-redeploys. Fine for testing, not fine for real long-term data. Once you're
-past the "does this work" stage, the standard fix is switching the database
-from SQLite to Postgres (Render offers a free Postgres instance) — that's a
-one-line change to `datasource db` in `schema.prisma` plus a new
-`DATABASE_URL`, no application code changes needed since Prisma abstracts
-the database engine. Worth doing before you rely on this with real data.
+**Known limitation:** Render's free web service spins down after 15 minutes
+of inactivity, so the first request after a quiet period takes 30-60s to
+wake back up. The app already shows a "waking up the server" message on the
+login/register screens so this doesn't look broken — it's just the tradeoff
+for $0/month. A paid Starter instance (~$7/mo) removes the sleep entirely,
+worth it once the app has regular traffic.
 
-### Frontend (Vercel or Netlify, either works)
+### 3. Frontend (Vercel)
 
 1. Import the same repo, set the **root directory** to `client`.
 2. Build command: `npm run build`. Output directory: `dist`.
 3. Add an environment variable: `VITE_API_URL` = your Render backend URL
    from above (e.g. `https://custos-api.onrender.com`).
 4. Deploy. You'll get a URL like `https://custos.vercel.app` — that's your
-   real, live app.
+   real, live app. Go back to Render and set `FRONTEND_URL` to this exact
+   URL (step 2.5 above).
 
 ### After deploying
 
-- Your local `.env` files never leave your machine — Render/Vercel use
+- Your local `.env` files never leave your machine — Render/Vercel/Neon use
   their own environment variable settings, not your `.env` files.
-- To use the app from your phone, just open the Vercel/Netlify URL in your
-  phone's browser — no app store install needed.
+- To use the app from your phone, just open the Vercel URL in your phone's
+  browser — no app store install needed.
+
+### Watching the free-tier ceilings
+
+None of these are hard walls you'll hit by surprise — check each dashboard
+occasionally as usage grows:
+
+- **Neon**: 0.5GB storage / 100 compute-hours per month, free forever. A
+  budget-tracker's data per user is small (transactions are a few hundred
+  bytes each), so this comfortably covers hundreds of users; watch the
+  storage graph in Neon's dashboard as your user count climbs.
+- **Render**: 750 free instance-hours/month — enough for one service to run
+  continuously all month. Cost only becomes relevant if you upgrade to
+  remove the cold-start sleep.
+- **Vercel**: 100GB bandwidth/month on the Hobby plan — a React SPA this
+  size won't come close, even at a few hundred daily users.
 
 ## Design tokens
 
