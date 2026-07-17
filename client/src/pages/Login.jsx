@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Icon from "../components/Icon.jsx";
+import GoogleButton from "../components/GoogleButton.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Login() {
@@ -95,6 +96,14 @@ export default function Login() {
             </Link>
           </p>
         </form>
+
+        <div className="flex items-center gap-3 my-5">
+          <div className="flex-1 h-px bg-[var(--border)]" />
+          <span className="text-[11px] uppercase tracking-wide text-[var(--on-surface-variant)]">or</span>
+          <div className="flex-1 h-px bg-[var(--border)]" />
+        </div>
+
+        <GoogleButton />
       </div>
     </div>
   );

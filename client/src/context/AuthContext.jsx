@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { api, setAuthToken } from "../api/client.js";
+import { signInWithGoogle } from "../firebase.js";
 
 const AuthContext = createContext(null);
 
@@ -39,6 +40,11 @@ export function AuthProvider({ children }) {
     applySession(await withWakeHint(() => api.register(emailInput, password)));
   }
 
+  async function loginWithGoogle() {
+    const idToken = await signInWithGoogle();
+    applySession(await withWakeHint(() => api.loginWithGoogle(idToken)));
+  }
+
   function logout() {
     setAuthToken(null);
     localStorage.removeItem("custos-email");
@@ -56,7 +62,18 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ token, email, name, login, register, logout, updateName, waking, isAuthenticated: Boolean(token) }}
+      value={{
+        token,
+        email,
+        name,
+        login,
+        register,
+        loginWithGoogle,
+        logout,
+        updateName,
+        waking,
+        isAuthenticated: Boolean(token),
+      }}
     >
       {children}
     </AuthContext.Provider>

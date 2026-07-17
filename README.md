@@ -107,6 +107,9 @@ the application code changes between environments — only `DATABASE_URL`.
      `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`)
    - `FRONTEND_URL` = your Vercel URL from step 3 below (add this *after*
      you have it — CORS will reject the frontend's requests until it's set)
+   - `FIREBASE_SERVICE_ACCOUNT` = only needed for Google sign-in — the full
+     service-account JSON as a single-line string (Firebase Console >
+     Project settings > Service accounts > Generate new private key)
 6. Deploy. Note the URL Render gives you (something like
    `https://custos-api.onrender.com`).
 
@@ -121,8 +124,13 @@ worth it once the app has regular traffic.
 
 1. Import the same repo, set the **root directory** to `client`.
 2. Build command: `npm run build`. Output directory: `dist`.
-3. Add an environment variable: `VITE_API_URL` = your Render backend URL
-   from above (e.g. `https://custos-api.onrender.com`).
+3. Add environment variables:
+   - `VITE_API_URL` = your Render backend URL from above (e.g.
+     `https://custos-api.onrender.com`)
+   - `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`,
+     `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID` — only needed for
+     Google sign-in, from Firebase Console > Project settings > Your apps.
+     These are public identifiers, safe to expose in frontend code.
 4. Deploy. You'll get a URL like `https://custos.vercel.app` — that's your
    real, live app. Go back to Render and set `FRONTEND_URL` to this exact
    URL (step 2.5 above).
