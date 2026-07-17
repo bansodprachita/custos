@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String?
+  passwordHash  String
+  categories    Category[]
+  transactions  Transaction[]
+  budgets       Budget[]
+  accounts      Account[]
+  subscriptions Subscription[]
+  savingsGoals  SavingsGoal[]
+  createdAt     DateTime       @default(now())
+}
+
+model Category {
+  id            Int            @id @default(autoincrement())
+  name          String
+  color         String         @default("#B08D57")
+  user          User           @relation(fields: [userId], references: [id])
+  userId        Int
+  transactions  Transaction[]
+  subscriptions Subscription[]
+  budget        Budget?
+  createdAt     DateTime       @default(now())
+
+  // Name only needs to be unique per user, not across everyone's accounts
+  @@unique([userId, name])
+}
+
+model Account {
+  id              Int           @id @default(autoincrement())
+  name            String
+  type            String // "checking" | "savings" | "credit"
+  last4           String?
+  startingBalance Float         @default(0)
+  color           String        @default("#6B7A4A")
+  user            User          @relation(fields: [userId], references: [id])
+  userId          Int
+  transactions    Transaction[]
+  createdAt       DateTime      @default(now())
+}
+
+model Subscription {
+  id           Int       @id @default(autoincrement())
+  name         String
+  amount       Float
+  billingCycle String // "monthly" | "yearly"
+  nextRenewal  DateTime
+  active       Boolean   @default(true)
+  category     Category? @relation(fields: [categoryId], references: [id])
+  categoryId   Int?
+  user         User      @relation(fields: [userId], references: [id])
+  userId       Int
+  createdAt    DateTime  @default(now())
+}
+
+model SavingsGoal {
+  id            Int       @id @default(autoincrement())
+  name          String
+  targetAmount  Float
+  currentAmount Float     @default(0)
+  targetDate    DateTime?
+  color         String    @default("#B08D57")
+  user          User      @relation(fields: [userId], references: [id])
+  userId        Int
+  createdAt     DateTime  @default(now())
+}
+
+model Budget {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @unique
+  category   Category @relation(fields: [categoryId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  amount     Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  amount      Float
+  type        String // "income" | "expense"
+  description String?
+  date        DateTime
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  account     Account? @relation(fields: [accountId], references: [id])
+  accountId   Int?
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime @default(now())
+}

@@ -1,0 +1,684 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Custos — five self-contained editorial themes, each with its own
+  typography, icon weight, radius scale, shadow system, density and
+  motion, on top of a shared Material-Design-3-style *role* vocabulary
+  (primary/secondary/tertiary + surface containers) so every component
+  keeps working unchanged when the theme swaps. Selected via
+  `[data-color-theme]` on <html>, combined with the existing `.dark`
+  class for light/dark mode.
+
+    matcha  — Matcha Morning   — calm, paper, slow living
+    amber   — Grey & Amber     — bold automotive-interior luxury
+    tide    — Daylight Tide    — bright Mediterranean airiness
+    cider   — Apple Cider      — cozy vintage editorial academia
+    forest  — Forest Noir      — cinematic, moody, expensive
+*/
+
+/* ============================= MATCHA MORNING ============================= */
+:root,
+[data-color-theme="matcha"] {
+  --bg: #f6f3e9;
+  --surface: #f6f3e9;
+  --surface-lowest: #fcfaf3;
+  --surface-low: #f1edde;
+  --surface-container: #efe9d8;
+  --surface-high: #e5dfc7;
+  --surface-highest: #dcd5b9;
+  --on-surface: #34362b;
+  --on-surface-variant: #6b6d57;
+  --outline: #8c8d6e;
+  --border: #e0d8c2;
+
+  --primary: #6b7a4a;
+  --on-primary: #ffffff;
+  --primary-container: #dce6c4;
+  --on-primary-container: #2c3319;
+
+  --secondary: #b08d57;
+  --on-secondary: #ffffff;
+  --secondary-container: #efdfc0;
+  --on-secondary-container: #4a3a1d;
+
+  --tertiary: #7c8f63;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #dce6c8;
+  --on-tertiary-container: #2e3a22;
+
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+
+  --font-heading: "Fraunces", ui-serif, Georgia, serif;
+  --font-body: "Karla", -apple-system, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+  --heading-style: italic;
+  --heading-weight: 600;
+  --heading-tracking: 0em;
+
+  --radius-1: 8px; --radius-2: 14px; --radius-3: 20px; --radius-4: 28px; --radius-5: 40px; --radius-pill: 999px;
+  --container-padding: 32px; --widget-gap: 20px;
+  --dur-fast: 220ms; --dur-med: 480ms; --dur-slow: 720ms;
+  --ease: cubic-bezier(.22,.61,.28,.99);
+  --icon-wght: 300; --icon-grad: -25; --icon-opsz: 24;
+
+  --shadow-sm: 0 1px 2px rgba(60,55,30,.05);
+  --shadow-md: 0 10px 28px -14px rgba(64,58,32,.16);
+  --shadow-lg: 0 22px 56px -20px rgba(64,58,32,.20);
+}
+[data-color-theme="matcha"].dark {
+  --bg: #1c1f16;
+  --surface: #23261b;
+  --surface-lowest: #171a11;
+  --surface-low: #1f2217;
+  --surface-container: #2b2e20;
+  --surface-high: #333624;
+  --surface-highest: #3d402c;
+  --on-surface: #ece8d6;
+  --on-surface-variant: #b7b79e;
+  --outline: #8f9178;
+  --border: rgba(255, 255, 255, 0.08);
+
+  --primary: #a6b685;
+  --on-primary: #263311;
+  --primary-container: #45542b;
+  --on-primary-container: #dce6c4;
+
+  --secondary: #d3b27e;
+  --on-secondary: #402f14;
+  --secondary-container: #5c4726;
+  --on-secondary-container: #efdfc0;
+
+  --tertiary: #a8bc8e;
+  --on-tertiary: #263311;
+  --tertiary-container: #45542b;
+  --on-tertiary-container: #dce6c8;
+
+  --error: #ff8a80;
+  --on-error: #3d1400;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 14px 32px -16px rgba(0,0,0,.5);
+  --shadow-lg: 0 28px 64px -22px rgba(0,0,0,.55);
+}
+
+/* ============================= GREY & AMBER ============================= */
+[data-color-theme="amber"] {
+  --bg: #eeece7;
+  --surface: #eeece7;
+  --surface-lowest: #fbfaf8;
+  --surface-low: #f2f0ea;
+  --surface-container: #e2dfd7;
+  --surface-high: #d3cfc2;
+  --surface-highest: #c4bfae;
+  --on-surface: #171712;
+  --on-surface-variant: #5a574e;
+  --outline: #7a766a;
+  --border: #d9d5cb;
+
+  --primary: #2b2b29;
+  --on-primary: #ffffff;
+  --primary-container: #dad7ce;
+  --on-primary-container: #171712;
+
+  --secondary: #b9812e;
+  --on-secondary: #ffffff;
+  --secondary-container: #f0dcb2;
+  --on-secondary-container: #4a3611;
+
+  --tertiary: #6e6a5e;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #dfdbce;
+  --on-tertiary-container: #33312a;
+
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+
+  --font-heading: "Big Shoulders Display", "Bahnschrift", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "Cascadia Mono", monospace;
+  --heading-style: normal;
+  --heading-weight: 800;
+  --heading-tracking: 0.01em;
+
+  --radius-1: 3px; --radius-2: 6px; --radius-3: 10px; --radius-4: 14px; --radius-5: 20px; --radius-pill: 8px;
+  --container-padding: 24px; --widget-gap: 14px;
+  --dur-fast: 130ms; --dur-med: 220ms; --dur-slow: 380ms;
+  --ease: cubic-bezier(.4,0,.2,1);
+  --icon-wght: 500; --icon-grad: 0; --icon-opsz: 24;
+
+  --shadow-sm: 0 1px 1px rgba(20,18,10,.08);
+  --shadow-md: 0 14px 26px -14px rgba(20,18,10,.26);
+  --shadow-lg: 0 30px 56px -18px rgba(20,18,10,.3);
+}
+[data-color-theme="amber"].dark {
+  --bg: #121211;
+  --surface: #1a1a18;
+  --surface-lowest: #0c0c0b;
+  --surface-low: #161614;
+  --surface-container: #232320;
+  --surface-high: #2d2d29;
+  --surface-highest: #383833;
+  --on-surface: #f1eee5;
+  --on-surface-variant: #c2beb1;
+  --outline: #8f8b7d;
+  --border: rgba(255, 255, 255, 0.06);
+
+  --primary: #d8d5cc;
+  --on-primary: #1e1e1b;
+  --primary-container: #3a3a34;
+  --on-primary-container: #edeae0;
+
+  --secondary: #e4a94d;
+  --on-secondary: #402c05;
+  --secondary-container: #5c4416;
+  --on-secondary-container: #f5dba8;
+
+  --tertiary: #b0ab9b;
+  --on-tertiary: #232320;
+  --tertiary-container: #43423a;
+  --on-tertiary-container: #dfdbce;
+
+  --error: #ff8a80;
+  --on-error: #3d1400;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  --shadow-sm: 0 1px 1px rgba(0,0,0,.5);
+  --shadow-md: 0 16px 36px -16px rgba(0,0,0,.65);
+  --shadow-lg: 0 34px 80px -22px rgba(0,0,0,.7), 0 0 50px -24px rgba(228,169,77,.12);
+}
+
+/* ============================= DAYLIGHT TIDE ============================= */
+[data-color-theme="tide"] {
+  --bg: #f6f4ec;
+  --surface: #ffffff;
+  --surface-lowest: #ffffff;
+  --surface-low: #f6f4ec;
+  --surface-container: #eaf2f1;
+  --surface-high: #dceae9;
+  --surface-highest: #cbdfdd;
+  --on-surface: #1a343b;
+  --on-surface-variant: #55747b;
+  --outline: #6c8890;
+  --border: #dce7e7;
+
+  --primary: #2e6e85;
+  --on-primary: #ffffff;
+  --primary-container: #c3e4ef;
+  --on-primary-container: #072935;
+
+  --secondary: #f0b84c;
+  --on-secondary: #402d00;
+  --secondary-container: #ffe3ac;
+  --on-secondary-container: #4a3400;
+
+  --tertiary: #1f4e5f;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #c3dce6;
+  --on-tertiary-container: #072935;
+
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+
+  --font-heading: "Sora", "Gill Sans MT", sans-serif;
+  --font-body: "Mulish", Corbel, sans-serif;
+  --font-mono: "SF Mono", Consolas, monospace;
+  --heading-style: normal;
+  --heading-weight: 700;
+  --heading-tracking: -0.01em;
+
+  --radius-1: 10px; --radius-2: 16px; --radius-3: 22px; --radius-4: 28px 28px 28px 8px; --radius-5: 44px; --radius-pill: 999px;
+  --container-padding: 36px; --widget-gap: 24px;
+  --dur-fast: 260ms; --dur-med: 420ms; --dur-slow: 620ms;
+  --ease: cubic-bezier(.33,.86,.4,.99);
+  --icon-wght: 350; --icon-grad: 0; --icon-opsz: 28;
+
+  --shadow-sm: 0 2px 6px -2px rgba(31,78,95,.12);
+  --shadow-md: 0 14px 30px -16px rgba(31,78,95,.2);
+  --shadow-lg: 0 28px 58px -20px rgba(31,78,95,.24);
+}
+[data-color-theme="tide"].dark {
+  --bg: #0d1e24;
+  --surface: #12262d;
+  --surface-lowest: #081418;
+  --surface-low: #0f2027;
+  --surface-container: #17303a;
+  --surface-high: #1f3a44;
+  --surface-highest: #28454f;
+  --on-surface: #e6f1f3;
+  --on-surface-variant: #a0bec5;
+  --outline: #85a3ac;
+  --border: #1d3941;
+
+  --primary: #6fb6d3;
+  --on-primary: #00344a;
+  --primary-container: #0f4d64;
+  --on-primary-container: #c3e4ef;
+
+  --secondary: #f0c066;
+  --on-secondary: #402d00;
+  --secondary-container: #5c4310;
+  --on-secondary-container: #ffe3ac;
+
+  --tertiary: #9ad1e8;
+  --on-tertiary: #003544;
+  --tertiary-container: #114f60;
+  --on-tertiary-container: #c3dce6;
+
+  --error: #ff8a80;
+  --on-error: #3d1400;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.3);
+  --shadow-md: 0 16px 36px -18px rgba(0,0,0,.5);
+  --shadow-lg: 0 30px 64px -20px rgba(0,0,0,.55);
+}
+
+/* ============================= APPLE CIDER ============================= */
+[data-color-theme="cider"] {
+  --bg: #f6ede2;
+  --surface: #fbf5ec;
+  --surface-lowest: #ffffff;
+  --surface-low: #f6ede2;
+  --surface-container: #efdfcc;
+  --surface-high: #e3cdb2;
+  --surface-highest: #d6bc9b;
+  --on-surface: #3a2a20;
+  --on-surface-variant: #75604f;
+  --outline: #8a7360;
+  --border: #e5d4be;
+
+  --primary: #6e2a35;
+  --on-primary: #ffffff;
+  --primary-container: #f3d2d6;
+  --on-primary-container: #3a0f17;
+
+  --secondary: #c1622d;
+  --on-secondary: #ffffff;
+  --secondary-container: #f5d3b8;
+  --on-secondary-container: #4a2205;
+
+  --tertiary: #8a5a3e;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #edd9c4;
+  --on-tertiary-container: #3a2410;
+
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+
+  --font-heading: "Playfair Display", Cambria, Georgia, serif;
+  --font-body: "Nunito Sans", Constantia, sans-serif;
+  --font-mono: Consolas, monospace;
+  --heading-style: italic;
+  --heading-weight: 600;
+  --heading-tracking: 0em;
+
+  --radius-1: 6px; --radius-2: 10px; --radius-3: 16px; --radius-4: 22px; --radius-5: 32px; --radius-pill: 999px;
+  --container-padding: 30px; --widget-gap: 18px;
+  --dur-fast: 240ms; --dur-med: 400ms; --dur-slow: 560ms;
+  --ease: cubic-bezier(.3,.4,.2,1);
+  --icon-wght: 400; --icon-grad: 25; --icon-opsz: 24;
+
+  --shadow-sm: 0 1px 3px rgba(58,35,20,.08);
+  --shadow-md: 0 12px 28px -16px rgba(69,32,20,.22);
+  --shadow-lg: 0 26px 54px -20px rgba(69,32,20,.26);
+}
+[data-color-theme="cider"].dark {
+  --bg: #1d1611;
+  --surface: #251c15;
+  --surface-lowest: #120d0a;
+  --surface-low: #1a140f;
+  --surface-container: #2e231a;
+  --surface-high: #392c20;
+  --surface-highest: #453626;
+  --on-surface: #f3e7d9;
+  --on-surface-variant: #d0b9a5;
+  --outline: #b39b87;
+  --border: rgba(255, 255, 255, 0.08);
+
+  --primary: #c9707e;
+  --on-primary: #4a0f1a;
+  --primary-container: #6e2a35;
+  --on-primary-container: #f3d2d6;
+
+  --secondary: #e08a4c;
+  --on-secondary: #4a2205;
+  --secondary-container: #6e3d14;
+  --on-secondary-container: #f5d3b8;
+
+  --tertiary: #c9a57e;
+  --on-tertiary: #402a10;
+  --tertiary-container: #5c4020;
+  --on-tertiary-container: #edd9c4;
+
+  --error: #ff8a80;
+  --on-error: #3d1400;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.35);
+  --shadow-md: 0 14px 32px -16px rgba(0,0,0,.5);
+  --shadow-lg: 0 28px 62px -20px rgba(0,0,0,.55);
+}
+
+/* ============================= FOREST NOIR ============================= */
+/* Cinematic and dark by nature — light mode still fully supported, but
+   the palette is authored dark-first. */
+[data-color-theme="forest"] {
+  --bg: #0a0d0a;
+  --surface: #10140f;
+  --surface-lowest: #060805;
+  --surface-low: #0d110d;
+  --surface-container: #161c14;
+  --surface-high: #1e2519;
+  --surface-highest: #272f20;
+  --on-surface: #e9e6d8;
+  --on-surface-variant: #a3ac94;
+  --outline: #7c8471;
+  --border: #1d251a;
+
+  --primary: #b8c9ac;
+  --on-primary: #1f2a18;
+  --primary-container: #37432a;
+  --on-primary-container: #d5e2c4;
+
+  --secondary: #e5ebdd;
+  --on-secondary: #2a3320;
+  --secondary-container: #414c34;
+  --on-secondary-container: #e5ebdd;
+
+  --tertiary: #7c8f63;
+  --on-tertiary: #10160b;
+  --tertiary-container: #2e3a22;
+  --on-tertiary-container: #c7d6b4;
+
+  --error: #ff8a80;
+  --on-error: #3d1400;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  --font-heading: "Cormorant Garamond", Didot, Georgia, serif;
+  --font-body: "Jost", "Century Gothic", sans-serif;
+  --font-mono: "SF Mono", Consolas, monospace;
+  --heading-style: normal;
+  --heading-weight: 600;
+  --heading-tracking: 0.01em;
+
+  --radius-1: 2px; --radius-2: 4px; --radius-3: 7px; --radius-4: 11px; --radius-5: 16px; --radius-pill: 3px;
+  --container-padding: 40px; --widget-gap: 26px;
+  --dur-fast: 260ms; --dur-med: 560ms; --dur-slow: 820ms;
+  --ease: cubic-bezier(.16,.6,.14,1);
+  --icon-wght: 200; --icon-grad: -25; --icon-opsz: 20;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.5);
+  --shadow-md: 0 18px 44px -20px rgba(0,0,0,.65), 0 0 36px -24px rgba(124,143,99,.2);
+  --shadow-lg: 0 38px 90px -28px rgba(0,0,0,.7), 0 0 80px -28px rgba(124,143,99,.25);
+}
+[data-color-theme="forest"].dark {
+  /* identical to the base block above — forest is authored dark-first */
+  --bg: #0a0d0a;
+  --surface: #10140f;
+  --surface-lowest: #060805;
+  --surface-low: #0d110d;
+  --surface-container: #161c14;
+  --surface-high: #1e2519;
+  --surface-highest: #272f20;
+  --on-surface: #e9e6d8;
+  --on-surface-variant: #a3ac94;
+  --outline: #7c8471;
+  --border: #1d251a;
+  --primary: #b8c9ac;
+  --on-primary: #1f2a18;
+  --primary-container: #37432a;
+  --on-primary-container: #d5e2c4;
+  --secondary: #e5ebdd;
+  --on-secondary: #2a3320;
+  --secondary-container: #414c34;
+  --on-secondary-container: #e5ebdd;
+  --tertiary: #7c8f63;
+  --on-tertiary: #10160b;
+  --tertiary-container: #2e3a22;
+  --on-tertiary-container: #c7d6b4;
+  --error: #ff8a80;
+  --on-error: #3d1400;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.5);
+  --shadow-md: 0 18px 44px -20px rgba(0,0,0,.65), 0 0 36px -24px rgba(124,143,99,.2);
+  --shadow-lg: 0 38px 90px -28px rgba(0,0,0,.7), 0 0 80px -28px rgba(124,143,99,.25);
+}
+/* Forest's explicit light mode — same type/radius/motion identity, a
+   genuinely lighter surface so the pairing isn't just "invert the dark". */
+[data-color-theme="forest"]:not(.dark) {
+  --bg: #edece3;
+  --surface: #f5f4ec;
+  --surface-lowest: #ffffff;
+  --surface-low: #edece3;
+  --surface-container: #e2e1d3;
+  --surface-high: #d4d3c1;
+  --surface-highest: #c5c4af;
+  --on-surface: #181d14;
+  --on-surface-variant: #565f4a;
+  --outline: #6c7462;
+  --border: #d8d6c6;
+
+  --primary: #24371f;
+  --on-primary: #ffffff;
+  --primary-container: #c3d8b7;
+  --on-primary-container: #0d1a08;
+
+  --secondary: #52693f;
+  --on-secondary: #ffffff;
+  --secondary-container: #d3e3c2;
+  --on-secondary-container: #1b2911;
+
+  --tertiary: #3f5732;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #c9dbb8;
+  --on-tertiary-container: #14230c;
+
+  --shadow-sm: 0 1px 2px rgba(20,25,10,.08);
+  --shadow-md: 0 14px 32px -16px rgba(20,25,10,.2);
+  --shadow-lg: 0 28px 60px -20px rgba(20,25,10,.24);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--dur-med) var(--ease), color var(--dur-med) var(--ease);
+}
+
+.font-serif {
+  font-family: var(--font-heading);
+}
+
+/*
+  Typography scale — sizes match the original DESIGN.md spec; family,
+  italic/weight and letter-spacing now come from the active theme so
+  "the same heading" reads as five different products.
+*/
+.text-display-lg {
+  font-family: var(--font-heading);
+  font-style: var(--heading-style);
+  font-size: 48px;
+  font-weight: var(--heading-weight);
+  line-height: 1.1;
+  letter-spacing: var(--heading-tracking);
+}
+@media (max-width: 640px) {
+  .text-display-lg {
+    font-size: 30px;
+  }
+}
+
+.text-headline-md {
+  font-family: var(--font-heading);
+  font-style: var(--heading-style);
+  font-size: 32px;
+  font-weight: var(--heading-weight);
+  line-height: 1.2;
+  letter-spacing: var(--heading-tracking);
+}
+@media (max-width: 640px) {
+  .text-headline-md {
+    font-size: 26px;
+  }
+}
+
+.text-body-main {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-label-ui {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.text-caption-bold {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.text-numeral {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-variation-settings: "FILL" 0, "wght" var(--icon-wght), "GRAD" var(--icon-grad), "opsz" var(--icon-opsz);
+  line-height: 1;
+  vertical-align: middle;
+  /* Prevents the icon name from wrapping/breaking mid-word while the font
+     loads, and stops it from being selectable as text. */
+  white-space: nowrap;
+  word-wrap: normal;
+  -webkit-font-smoothing: antialiased;
+  transition: font-variation-settings var(--dur-fast) var(--ease);
+}
+.material-symbols-outlined.icon-filled {
+  font-variation-settings: "FILL" 1, "wght" var(--icon-wght), "GRAD" var(--icon-grad), "opsz" var(--icon-opsz);
+}
+
+/* Tonal, theme-tinted shadow rather than a fixed black one — reads as
+   material weight rather than flat digital elevation. */
+.card-soft {
+  box-shadow: var(--shadow-md);
+}
+
+.card-hover {
+  transition: transform var(--dur-med) var(--ease), box-shadow var(--dur-med) var(--ease);
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-in {
+  animation: fade-up var(--dur-med) var(--ease) both;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}
+
+@keyframes coin-flip {
+  0% {
+    transform: rotateY(0deg) scale(0.85);
+  }
+  100% {
+    transform: rotateY(1080deg) scale(1);
+  }
+}
+.animate-coin {
+  animation: coin-flip 1.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  transform-style: preserve-3d;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-14px, 10px) scale(1.06);
+  }
+}
+.animate-drift {
+  animation: drift 10s ease-in-out infinite;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-highest);
+  border-radius: 999px;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
